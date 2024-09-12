@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>content - COMEON</title>
+    <link href="/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/obsidian.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <%-include('header.ejs')%>
+    <hr>
+    <div class="title-box">
+        <h1><%= result.title %></h1> 
+        <h3><%= result.subtitle %></h3> 
+    </div>
+    <hr>
+    <div class="text-wrap">
+        <div class="text-box">
+            <%- result.content %>
+        </div>
+        
+    </div>
+    <div class="comment-div">
+        <%- include('comment.ejs', { postId: postId }) %>
+    </div>
+    <div class="footer">
+        <h3><%= result.title %></h3> 
+    </div>
+</body>
+</html>
