@@ -1,0 +1,57 @@
+<div class="comments-section">
+    <h3 class="comments-title">댓글</h3>
+    <% if (comments && comments.length > 0) { %>
+        <ul id="comments-list">
+        <% comments.forEach(function(comment) { %>
+            <li id="comment-<%= comment._id %>" class="comment">
+                <p>
+                    <strong class="comment-username"><%= comment.username %></strong>: 
+                    <span class="comment-content"><%= comment.content %></span>
+                    <% if (user && user._id.toString() === comment.userId.toString()) { %>
+                        <button class="delete-comment" data-id="<%= comment._id %>">삭제</button>
+                    <% } %>
+                </p>
+            </li>
+        <% }); %>
+        </ul>
+    <% } else { %>
+        <p class="no-comments">아직 댓글이 없습니다.</p>
+    <% } %>
+
+    <form class="comment-form" action="/add-comment" method="POST">
+        <input type="hidden" name="postId" value="<%= postId %>">
+        <textarea class="comment-textarea" name="content" placeholder="댓글을 입력하세요" required></textarea>
+        <button class="comment-submit" type="submit">댓글 작성</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-comment');
+    
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const commentId = this.getAttribute('data-id');
+            if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+                fetch(`/delete-comment/${commentId}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === '댓글이 성공적으로 삭제되었습니다.') {
+                        const commentElement = document.getElementById(`comment-${commentId}`);
+                        commentElement.remove();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('댓글 삭제 중 오류가 발생했습니다.');
+                });
+            }
+        });
+    });
+});
+</script>
+
